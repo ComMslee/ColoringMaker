@@ -5,4 +5,5 @@ __pycache__/
 *.exe
 build/
 .claude/
+원본/
 원본이미지/

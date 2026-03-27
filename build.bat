@@ -7,8 +7,10 @@ echo.
 
 cd /d "%~dp0"
 
+set ICON_PATH=%cd%\src\res\icon.ico
+
 echo [1/3] 빌드 시작...
-py -m PyInstaller --onefile --windowed --name "ColoringMaker" --icon "%~dp0src\res\icon.ico" "src\coloring_maker.py" --distpath "build" --workpath "build\temp" --specpath "build\temp" -y
+py -m PyInstaller --onefile --windowed --name "ColoringMaker" --icon "%ICON_PATH%" "src\coloring_maker.py" --distpath "build" --workpath "build\temp" --specpath "build\temp" -y
 
 if %ERRORLEVEL% NEQ 0 (
     echo.

@@ -153,7 +153,7 @@ class ColoringMakerApp:
         self.root.configure(bg='#f0f0f0')
 
         # 윈도우 크기 & 중앙 배치
-        win_w, win_h = 500, 400
+        win_w, win_h = 500, 520
         sx = (self.root.winfo_screenwidth() - win_w) // 2
         sy = (self.root.winfo_screenheight() - win_h) // 2
         self.root.geometry("{}x{}+{}+{}".format(win_w, win_h, sx, sy))
