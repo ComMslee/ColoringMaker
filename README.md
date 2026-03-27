@@ -20,13 +20,13 @@
 
 ### 로컬 빌드
 ```
-build.bat
+scripts\build.bat
 ```
 Python, PyInstaller, opencv-python-headless, numpy, Pillow 필요
 
 ### 릴리즈 (GitHub Actions 자동 빌드)
 ```
-release.bat
+scripts\release.bat
 ```
 버전 입력 → 커밋 → 태그 → 푸시 → Actions가 exe 빌드 + Release 생성
 
@@ -38,9 +38,11 @@ release.bat
 │   ├── convert_coloring.py # CLI 변환 스크립트
 │   └── res/
 │       └── icon.ico        # 앱 아이콘
-├── build.bat               # 로컬 빌드 스크립트
-├── release.bat             # 릴리즈 스크립트
+├── scripts/
+│   ├── build.bat           # 로컬 빌드 스크립트
+│   └── release.bat         # 릴리즈 스크립트
 ├── VERSION                 # 버전 파일
+├── requirements.txt        # 의존성
 └── .github/workflows/
     └── release.yml         # GitHub Actions 빌드+릴리즈
 ```

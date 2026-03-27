@@ -4,7 +4,7 @@ echo   ColoringMaker Build
 echo ===================================
 echo.
 
-cd /d "%~dp0"
+cd /d "%~dp0\.."
 
 where py >nul 2>nul
 if %ERRORLEVEL% NEQ 0 (

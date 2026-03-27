@@ -4,7 +4,7 @@ echo   ColoringMaker Release
 echo ===================================
 echo.
 
-cd /d "%~dp0"
+cd /d "%~dp0\.."
 
 :: Read current version
 set /p CURRENT_VER=<VERSION
