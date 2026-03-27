@@ -1,35 +1,48 @@
 @echo off
-chcp 65001 >nul
 echo ===================================
-echo   ColoringMaker 빌드
+echo   ColoringMaker Build
 echo ===================================
 echo.
 
 cd /d "%~dp0"
 
-set ICON_PATH=%cd%\src\res\icon.ico
+where py >nul 2>nul
+if %ERRORLEVEL% NEQ 0 (
+    echo [!] Python not found.
+    pause
+    exit /b 1
+)
 
-echo [1/3] 빌드 시작...
-py -m PyInstaller --onefile --windowed --name "ColoringMaker" --icon "%ICON_PATH%" "src\coloring_maker.py" --distpath "build" --workpath "build\temp" --specpath "build\temp" -y
+py -m PyInstaller --version >nul 2>nul
+if %ERRORLEVEL% NEQ 0 (
+    echo Installing PyInstaller...
+    py -m pip install pyinstaller
+)
+
+echo [1/4] Preparing icon...
+copy /y "src\res\icon.ico" "%TEMP%\coloring_icon.ico" >nul
+
+echo [2/4] Building exe...
+py -m PyInstaller --onefile --windowed --name "ColoringMaker" --icon "%TEMP%\coloring_icon.ico" "src\coloring_maker.py" --distpath "build" --workpath "build\temp" --specpath "build\temp" -y
 
 if %ERRORLEVEL% NEQ 0 (
     echo.
-    echo [!] 빌드 실패!
+    echo [!] Build FAILED!
+    del "%TEMP%\coloring_icon.ico" 2>nul
     pause
     exit /b 1
 )
 
 echo.
-echo [2/3] 임시 파일 정리...
-rd /s /q "build\temp" 2>nul
+echo [3/4] Cleanup...
+if exist "build\temp" rd /s /q "build\temp"
+del "%TEMP%\coloring_icon.ico" 2>nul
 
-echo [3/3] 릴리즈 복사...
+echo [4/4] Copy to release...
 copy /y "build\ColoringMaker.exe" "ColoringMaker.exe" >nul
 
 echo.
 echo ===================================
-echo   빌드 완료!
-echo   build\ColoringMaker.exe
-echo   ColoringMaker.exe (릴리즈)
+echo   Done! -^> ColoringMaker.exe
 echo ===================================
 pause
