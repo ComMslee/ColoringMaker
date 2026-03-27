@@ -7,7 +7,7 @@ echo.
 cd /d "%~dp0\.."
 
 :: Read current version
-set /p CURRENT_VER=<VERSION
+set /p CURRENT_VER=<src\VERSION
 echo Current version: %CURRENT_VER%
 echo.
 
@@ -20,7 +20,7 @@ if "%NEW_VER%"=="" (
 )
 
 :: Update VERSION file
-echo %NEW_VER%> VERSION
+echo %NEW_VER%> src\VERSION
 
 :: Git add, commit, tag, push
 echo.

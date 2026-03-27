@@ -1,11 +1,20 @@
+# Build
+build/
+*.exe
+*.spec
+
+# Python
 __pycache__/
 *.pyc
-*.spec
+
+# Output
 *.pdf
-*.exe
-build/
-.claude/*
-!.claude/skills/
+test_output/
+
+# Test images
 원본/
 원본이미지/
-test_output/
+
+# Claude (skills만 포함)
+.claude/*
+!.claude/skills/

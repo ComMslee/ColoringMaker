@@ -37,7 +37,7 @@ jobs:
       - name: Read VERSION
         id: version
         run: |
-          $ver = Get-Content VERSION -Raw
+          $ver = Get-Content src/VERSION -Raw
           echo "version=$($ver.Trim())" >> $env:GITHUB_OUTPUT
         shell: pwsh
 

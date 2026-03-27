@@ -35,13 +35,12 @@ scripts\release.bat
 ```
 ├── src/
 │   ├── coloring_maker.py   # 메인 GUI 프로그램
-│   ├── convert_coloring.py # CLI 변환 스크립트
+│   ├── VERSION             # 버전 파일
 │   └── res/
 │       └── icon.ico        # 앱 아이콘
 ├── scripts/
 │   ├── build.bat           # 로컬 빌드 스크립트
 │   └── release.bat         # 릴리즈 스크립트
-├── VERSION                 # 버전 파일
 ├── requirements.txt        # 의존성
 └── .github/workflows/
     └── release.yml         # GitHub Actions 빌드+릴리즈
