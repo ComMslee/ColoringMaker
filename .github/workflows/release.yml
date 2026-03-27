@@ -23,7 +23,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install pyinstaller opencv-python-headless numpy Pillow
+          pip install -r requirements.txt
 
       - name: Build exe
         run: |
