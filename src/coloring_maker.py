@@ -9,13 +9,27 @@
 import os
 import sys
 import threading
-import cv2
-import numpy as np
-from PIL import Image
 from datetime import datetime
 
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
+
+# 무거운 라이브러리는 지연 로딩 (GUI 먼저 표시)
+cv2 = None
+np = None
+Image = None
+
+
+def _ensure_libs():
+    """무거운 라이브러리를 최초 1회만 로드합니다."""
+    global cv2, np, Image
+    if cv2 is None:
+        import cv2 as _cv2
+        import numpy as _np
+        from PIL import Image as _Image
+        cv2 = _cv2
+        np = _np
+        Image = _Image
 
 
 # ============================================================
@@ -238,7 +252,6 @@ class ColoringMakerApp:
                 text="{}개의 이미지를 찾았습니다.".format(len(images)) if images
                 else "이미지가 없습니다!"
             )
-            # 자동으로 출력 경로 설정
             folder_name = os.path.basename(os.path.normpath(folder))
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
             parent = os.path.dirname(os.path.abspath(folder))
@@ -278,7 +291,7 @@ class ColoringMakerApp:
         self.processing = True
         self.start_btn.config(state='disabled', bg='#aaaaaa')
         self.progress['value'] = 0
-        self.progress['maximum'] = len(images)
+        self.progress['maximum'] = len(images) + 1  # +1 for lib loading
 
         thread = threading.Thread(
             target=self._run_conversion,
@@ -288,6 +301,11 @@ class ColoringMakerApp:
         thread.start()
 
     def _run_conversion(self, images, output_path, line_thickness):
+        # 라이브러리 지연 로딩 (최초 1회)
+        self._update_status("엔진 준비 중...")
+        _ensure_libs()
+        self._update_progress(1)
+
         pages = []
         total = len(images)
 
@@ -299,7 +317,7 @@ class ColoringMakerApp:
                 pages.append(page)
             except Exception as e:
                 self._update_status("실패: {} ({})".format(filename, e))
-            self._update_progress(i + 1)
+            self._update_progress(i + 2)  # +1 offset for lib loading step
 
         if pages:
             self._update_status("PDF 생성 중...")

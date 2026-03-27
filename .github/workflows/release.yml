@@ -1,0 +1,64 @@
+name: Build & Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install pyinstaller opencv-python-headless numpy Pillow
+
+      - name: Build exe
+        run: |
+          pyinstaller --onefile --windowed --name "ColoringMaker" --icon "src\res\icon.ico" "src\coloring_maker.py" --distpath "dist" -y
+
+      - name: Create zip
+        run: |
+          Compress-Archive -Path "dist\ColoringMaker.exe" -DestinationPath "ColoringMaker-${{ github.ref_name }}.zip"
+        shell: pwsh
+
+      - name: Read VERSION
+        id: version
+        run: |
+          $ver = Get-Content VERSION -Raw
+          echo "version=$($ver.Trim())" >> $env:GITHUB_OUTPUT
+        shell: pwsh
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "ColoringMaker ${{ steps.version.outputs.version }}"
+          body: |
+            ## ColoringMaker ${{ steps.version.outputs.version }}
+
+            색칠도안 메이커 - 이미지를 색칠도안으로 변환하여 A4 PDF로 생성합니다.
+
+            ### 사용법
+            1. `ColoringMaker.exe` 다운로드
+            2. 실행 후 원본 이미지 폴더 선택
+            3. 선 굵기 설정 후 시작 클릭
+            4. PDF 자동 생성
+
+            ### Changes
+            See [commit log](https://github.com/${{ github.repository }}/commits/${{ github.ref_name }}) for details.
+          files: |
+            ColoringMaker-${{ github.ref_name }}.zip
+          draft: false
+          prerelease: false
